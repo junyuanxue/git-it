@@ -9,7 +9,7 @@ describe('GithubAPIService', function(){
   var user1Info = { followers: 0, public_repos: 4 };
   var user2Info = { followers: 2, public_repos: 10 };
 
-  beforeEach(inject(function(_GithubAPIService_,_userFactory_,$httpBackend) {
+  beforeEach(inject(function(_GithubAPIService_, _userFactory_, $httpBackend) {
     GithubAPIService = _GithubAPIService_;
     userFactory = _userFactory_;
     httpBackend = $httpBackend;
@@ -35,8 +35,13 @@ describe('GithubAPIService', function(){
     user2.numOfFollowers = 2;
     user2.avatar = 'harsheet.png';
 
-    GithubAPIService.getUsers().then(function(usersData){
-      expect(usersData).toEqual([user1,user2]);
+    GithubAPIService.getUsers().then(function(usersData) {
+      usersData.forEach(function(promise) {
+        promise.then(function(value) {
+          console.log(value);
+        });
+      });
+      expect(usersData).toEqual([user1, user2]);
     });
 
     httpBackend.flush();

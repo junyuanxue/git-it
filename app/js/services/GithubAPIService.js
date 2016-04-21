@@ -21,22 +21,18 @@ angular
         user.username = userData.login;
         user.avatar = userData.avatar_url;
 
-
-        _getUserInfo(user, userData.login);
-
-        console.log(user);
-        return user;
+        return _getUserInfo(user, userData.login).then(function(user) {
+          return user;
+        });
       });
     };
 
     function _getUserInfo(user, username) {
-      $http.get('https://api.github.com/users/' + username + accessToken)
+      return $http.get('https://api.github.com/users/' + username + accessToken)
       .then(function(response) {
         user.numOfFollowers = response.data.followers;
         user.numOfRepos = response.data.public_repos;
-        console.log("This should come first")
-        console.log(user);
+        return user;
       });
     };
-
   }]);
