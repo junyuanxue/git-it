@@ -3,7 +3,7 @@ describe('GithubProfileController', function() {
 
   var ctrl, userFactory, httpBackend, GithubAPIService, q;
   var usersData = [{ login: 'kyle' },
-                   {  login: 'harsheet' }];
+                   { login: 'harsheet' }];
 
   var user1Info = { id: 1, login: 'kyle', avatar_url: 'kyle.png', followers: 0, public_repos: 4 };
   var user2Info = { id: 2, login: 'harsheet', avatar_url: 'harsheet.png', followers: 2, public_repos: 10 };
@@ -39,13 +39,7 @@ describe('GithubProfileController', function() {
     user2.numOfFollowers = 2;
 
     GithubAPIService.getUsers().then(function(usersData) {
-      console.log(usersData);
-      console.log(ctrl.users);
-
       q.all(usersData).then((values) => {
-
-        console.log(ctrl.users);
-        
         expect(ctrl.users).toEqual([user1, user2]);
       });
     });
