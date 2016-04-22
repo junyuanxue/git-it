@@ -3,11 +3,11 @@ describe('GithubAPIService', function(){
 
   var GithubAPIService, httpBackend;
 
-  var usersData = [{ id: 1, login: 'kyle', avatar_url: 'kyle.png' },
-                   { id: 2, login: 'harsheet', avatar_url: 'harsheet.png' }];
+  var usersData = [{ login: 'kyle' },
+                   {  login: 'harsheet' }];
 
-  var user1Info = { followers: 0, public_repos: 4 };
-  var user2Info = { followers: 2, public_repos: 10 };
+  var user1Info = { id: 1, login: 'kyle', avatar_url: 'kyle.png', followers: 0, public_repos: 4 };
+  var user2Info = { id: 2, login: 'harsheet', avatar_url: 'harsheet.png', followers: 2, public_repos: 10 };
 
   beforeEach(inject(function(_GithubAPIService_, _userFactory_, $httpBackend) {
     GithubAPIService = _GithubAPIService_;
@@ -16,9 +16,11 @@ describe('GithubAPIService', function(){
   }));
 
   it('fetches a list of users', function(){
-    httpBackend.expectGET("https://api.github.com/users?access_token=3444a3707c527571bed704e5df863f35a523f78d").respond(usersData);
-    httpBackend.expectGET("https://api.github.com/users/kyle?access_token=3444a3707c527571bed704e5df863f35a523f78d").respond(user1Info);
-    httpBackend.expectGET("https://api.github.com/users/harsheet?access_token=3444a3707c527571bed704e5df863f35a523f78d").respond(user2Info);
+    var accessToken = '?access_token=c2e5e182ac8e52ea45d72ff279b13389ea2d2ec7'
+
+    httpBackend.expectGET("https://api.github.com/users" + accessToken ).respond(usersData);
+    httpBackend.expectGET("https://api.github.com/users/kyle" + accessToken).respond(user1Info);
+    httpBackend.expectGET("https://api.github.com/users/harsheet" + accessToken).respond(user2Info);
 
 
     var user1 = new userFactory();
@@ -36,11 +38,7 @@ describe('GithubAPIService', function(){
     user2.avatar = 'harsheet.png';
 
     GithubAPIService.getUsers().then(function(usersData) {
-      usersData.forEach(function(promise) {
-        promise.then(function(value) {
-          console.log(value);
-        });
-      });
+      console.log(usersData);
       expect(usersData).toEqual([user1, user2]);
     });
 

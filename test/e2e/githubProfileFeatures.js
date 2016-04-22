@@ -9,7 +9,7 @@ describe('Github Profile App', function() {
       },
       response: {
         data: [{ id: 1, login: 'kyle', repos_url: 4, followers_url: 0, avatar_url: 'kyle.png' },
-                         { id: 2, login: 'harsheet', repos_url: 10, followers_url: 2, avatar_url: 'harsheet.png' }]
+               { id: 2, login: 'harsheet', repos_url: 10, followers_url: 2, avatar_url: 'harsheet.png' }]
       }
     }]);
   });

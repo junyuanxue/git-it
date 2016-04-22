@@ -4,14 +4,20 @@ describe('GithubProfileController', function() {
   var ctrl, userFactory, httpBackend, GithubAPIService;
   var usersData = [{ id: 1, login: 'kyle', repos_url: 4, followers_url: 0, avatar_url: 'kyle.png' },
                    { id: 2, login: 'harsheet', repos_url: 10, followers_url: 2, avatar_url: 'harsheet.png' }];
+  var user1Info = { followers: 0, public_repos: 4 };
+  var user2Info = { followers: 2, public_repos: 10 };
+
 
   beforeEach(inject(function($controller, _userFactory_, $httpBackend) {
     ctrl = $controller('GithubProfileController');
     userFactory = _userFactory_;
     httpBackend = $httpBackend;
 
-    httpBackend.expectGET("https://api.github.com/users?access_token=3444a3707c527571bed704e5df863f35a523f78d").respond(usersData);
-    httpBackend.flush();
+    var accessToken = '?access_token=c2e5e182ac8e52ea45d72ff279b13389ea2d2ec7'
+
+    httpBackend.expectGET("https://api.github.com/users" + accessToken ).respond(usersData);
+    httpBackend.expectGET("https://api.github.com/users/kyle" + accessToken).respond(user1Info);
+    httpBackend.expectGET("https://api.github.com/users/harsheet" + accessToken).respond(user2Info);
   }));
 
   it('has two users', function() {

@@ -4,35 +4,34 @@ angular
 
     var self = this;
 
-    var accessToken = '?access_token=3444a3707c527571bed704e5df863f35a523f78d'
+    var accessToken = '?access_token=c2e5e182ac8e52ea45d72ff279b13389ea2d2ec7'
 
     self.getUsers = function() {
       return $http.get('https://api.github.com/users' + accessToken)
-      .then(function(response) {
-        return _handleResponseFromAPI(response.data);
+        .then(_handleResponseFromAPI)
+    };
+
+    function _handleResponseFromAPI(response) {
+      return response.data.map(function(userData) {
+        return _getUserInfo(userData);
       });
     };
 
-    function _handleResponseFromAPI(data) {
-      return data.map(function(userData) {
-        var user = new userFactory();
+    function _getUserInfo(userData) {
+      return $http.get('https://api.github.com/users/' + userData.login + accessToken)
+        .then(_createUserObject)
+    }
 
-        user.userId = userData.id;
-        user.username = userData.login;
-        user.avatar = userData.avatar_url;
+    function _createUserObject(response) {
+      var user = new userFactory();
 
-        return _getUserInfo(user, userData.login).then(function(user) {
-          return user;
-        });
-      });
-    };
+      user.userId = response.data.id;
+      user.username = response.data.login;
+      user.avatar = response.data.avatar_url;
+      user.numOfFollowers = response.data.followers;
+      user.numOfRepos = response.data.public_repos;
 
-    function _getUserInfo(user, username) {
-      return $http.get('https://api.github.com/users/' + username + accessToken)
-      .then(function(response) {
-        user.numOfFollowers = response.data.followers;
-        user.numOfRepos = response.data.public_repos;
-        return user;
-      });
-    };
+      console.log(user);
+      return user;
+    }
   }]);
