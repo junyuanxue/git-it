@@ -3,12 +3,13 @@ angular
   .service('GithubAPIService', ['$http', 'userFactory', function($http, userFactory) {
 
     var self = this;
+    var users = [];
 
     var accessToken = '?access_token=c2e5e182ac8e52ea45d72ff279b13389ea2d2ec7'
 
     self.getUsers = function() {
       return $http.get('https://api.github.com/users' + accessToken)
-        .then(_handleResponseFromAPI)
+        .then(_handleResponseFromAPI);
     };
 
     function _handleResponseFromAPI(response) {
@@ -19,8 +20,8 @@ angular
 
     function _getUserInfo(userData) {
       return $http.get('https://api.github.com/users/' + userData.login + accessToken)
-        .then(_createUserObject)
-    }
+        .then(_createUserObject);
+    };
 
     function _createUserObject(response) {
       var user = new userFactory();
@@ -31,7 +32,7 @@ angular
       user.numOfFollowers = response.data.followers;
       user.numOfRepos = response.data.public_repos;
 
-      console.log(user);
-      return user;
-    }
+      users.push(user);
+      return users;
+    };
   }]);

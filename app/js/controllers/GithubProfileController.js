@@ -1,16 +1,20 @@
 angular
   .module('githubProfileApp')
-  .controller('GithubProfileController', ['$http', 'GithubAPIService', 'userFactory', function($http, GithubAPIService, userFactory) {
+  .controller('GithubProfileController', ['$q', '$http', 'GithubAPIService', 'userFactory', function($q, $http, GithubAPIService, userFactory) {
 
     var self = this;
 
+    self.users = [];
+
     GithubAPIService.getUsers().then(function(users) {
-      self.users = users;
-    });
+      $q.all(users).then((values) => {
+        self.users = values[0];
+      });
+    })
 
     self.search = function(searchText) {
       GithubAPIService.getUsers(searchText).then(function(users) {
         self.users = users;
-    })};
-
+      });
+    };
   }]);

@@ -1,18 +1,19 @@
 describe('GithubAPIService', function(){
   beforeEach(module('githubProfileApp'));
 
-  var GithubAPIService, httpBackend;
+  var GithubAPIService, httpBackend, q;
 
   var usersData = [{ login: 'kyle' },
-                   {  login: 'harsheet' }];
+                   { login: 'harsheet' }];
 
   var user1Info = { id: 1, login: 'kyle', avatar_url: 'kyle.png', followers: 0, public_repos: 4 };
   var user2Info = { id: 2, login: 'harsheet', avatar_url: 'harsheet.png', followers: 2, public_repos: 10 };
 
-  beforeEach(inject(function(_GithubAPIService_, _userFactory_, $httpBackend) {
+  beforeEach(inject(function($q, _GithubAPIService_, _userFactory_, $httpBackend) {
     GithubAPIService = _GithubAPIService_;
     userFactory = _userFactory_;
     httpBackend = $httpBackend;
+    q = $q;
   }));
 
   it('fetches a list of users', function(){
@@ -26,20 +27,21 @@ describe('GithubAPIService', function(){
     var user1 = new userFactory();
     user1.userId = 1;
     user1.username = 'kyle';
+    user1.avatar = 'kyle.png';
     user1.numOfRepos = 4;
     user1.numOfFollowers = 0;
-    user1.avatar = 'kyle.png';
 
     var user2 = new userFactory();
     user2.userId = 2;
     user2.username = 'harsheet';
+    user2.avatar = 'harsheet.png';
     user2.numOfRepos = 10;
     user2.numOfFollowers = 2;
-    user2.avatar = 'harsheet.png';
 
     GithubAPIService.getUsers().then(function(usersData) {
-      console.log(usersData);
-      expect(usersData).toEqual([user1, user2]);
+      q.all(usersData).then((values) => {
+        expect(values[0]).toEqual([user1, user2]);
+      });
     });
 
     httpBackend.flush();
