@@ -1,9 +1,20 @@
 angular
   .module('githubProfileApp')
-  .controller('GithubProfileController', function() {
+  .controller('GithubProfileController', ['$q', '$http', 'GithubAPIService', 'userFactory', function($q, $http, GithubAPIService, userFactory) {
 
     var self = this;
 
-    self.users = [{ username: 'kyle', numOfRepos: 10, numOfFollowers: 20, avatar: 'kyle.jpg' },
-                  { username: 'harsheet', numOfRepos: 18, numOfFollowers: 23, avatar: 'harsheet.jpg' }];
-  });
+    self.users = [];
+
+    GithubAPIService.getUsers().then(function(users) {
+      $q.all(users).then((values) => {
+        self.users = values[0];
+      });
+    })
+
+    self.search = function(searchText) {
+      GithubAPIService.getUsers(searchText).then(function(users) {
+        self.users = users;
+      });
+    };
+  }]);
