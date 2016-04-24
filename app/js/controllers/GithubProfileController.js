@@ -6,15 +6,17 @@ angular
 
     self.users = [];
 
-    GithubAPIService.getUsers().then(function(users) {
-      $q.all(users).then((values) => {
-        self.users = values[0];
-      });
-    })
+    // GithubAPIService.getUsers().then(function(users) {
+    //   $q.all(users).then((values) => {
+    //     self.users = values[0];
+    //   });
+    // })
 
     self.search = function(searchText) {
-      GithubAPIService.getUsers(searchText).then(function(users) {
-        self.users = users;
+      self.users = [];
+
+      GithubAPIService.searchUsers(searchText).then(function(users) {
+        self.users = users[0];
       });
     };
   }]);

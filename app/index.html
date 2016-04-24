@@ -11,8 +11,9 @@
   </head>
   <body>
     <div id="users" ng-controller="GithubProfileController as ctrl">
-      <input ng-model="searchText" ng-keyup="ctrl.search(searchText)" id="search-by-username" type="text" placeholder="Search by username">
-      <ul ng-repeat="user in ctrl.users | filter:search">
+      <input ng-model="searchText" id="search-by-username" type="text" placeholder="Search by Github username">
+      <button ng-click="ctrl.search(searchText);">Git user!</button>
+      <ul ng-repeat="user in ctrl.users">
         <li>
           <ul>
             <img src="{{ user.avatar }}">

@@ -3,11 +3,12 @@ describe('GithubAPIService', function(){
 
   var GithubAPIService, httpBackend, q;
 
-  var usersData = [{ login: 'kyle' },
-                   { login: 'harsheet' }];
-
-  var user1Info = { id: 1, login: 'kyle', avatar_url: 'kyle.png', followers: 0, public_repos: 4 };
-  var user2Info = { id: 2, login: 'harsheet', avatar_url: 'harsheet.png', followers: 2, public_repos: 10 };
+  // var usersData = [{ login: 'kyle' },
+  //                  { login: 'harsheet' }];
+  //
+  // var user1Info = { login: 'kyle', avatar_url: 'kyle.png', followers: 0, public_repos: 4 };
+  // var user2Info = { login: 'harsheet', avatar_url: 'harsheet.png', followers: 2, public_repos: 10 };
+  var userData = { "items": [{ login: "kyle", avatar_url: "kyle.png", followers: 0, public_repos: 4 }] }
 
   beforeEach(inject(function($q, _GithubAPIService_, _userFactory_, $httpBackend) {
     GithubAPIService = _GithubAPIService_;
@@ -16,34 +17,11 @@ describe('GithubAPIService', function(){
     q = $q;
   }));
 
-  it('fetches a list of users', function(){
-    var accessToken = '?access_token=c2e5e182ac8e52ea45d72ff279b13389ea2d2ec7'
-
-    httpBackend.expectGET("https://api.github.com/users" + accessToken ).respond(usersData);
-    httpBackend.expectGET("https://api.github.com/users/kyle" + accessToken).respond(user1Info);
-    httpBackend.expectGET("https://api.github.com/users/harsheet" + accessToken).respond(user2Info);
-
-
-    var user1 = new userFactory();
-    user1.userId = 1;
-    user1.username = 'kyle';
-    user1.avatar = 'kyle.png';
-    user1.numOfRepos = 4;
-    user1.numOfFollowers = 0;
-
-    var user2 = new userFactory();
-    user2.userId = 2;
-    user2.username = 'harsheet';
-    user2.avatar = 'harsheet.png';
-    user2.numOfRepos = 10;
-    user2.numOfFollowers = 2;
-
-    GithubAPIService.getUsers().then(function(usersData) {
-      q.all(usersData).then((values) => {
-        expect(values[0]).toEqual([user1, user2]);
-      });
-    });
+  it('fetches user by username', function() {
+    var accessToken = 'access_token=43ce04f42a3b62b50daebf8ecf91712dad18e5be';
+    httpBackend.expectGET("https://api.github.com/search/users?q=kyle&" + accessToken ).respond(usersData);
 
     httpBackend.flush();
+
   });
 });

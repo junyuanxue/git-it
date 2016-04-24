@@ -5,34 +5,21 @@ angular
     var self = this;
     var users = [];
 
-    var accessToken = '?access_token=c2e5e182ac8e52ea45d72ff279b13389ea2d2ec7'
+    var accessToken = 'access_token=43ce04f42a3b62b50daebf8ecf91712dad18e5be'
 
-    self.getUsers = function() {
-      return $http.get('https://api.github.com/users' + accessToken)
-        .then(_handleResponseFromAPI);
-    };
+    self.searchUsers = function(username) {
+      return $http.get('https://api.github.com/search/users?q=' + username + '+in:login&' + accessToken).then(function(response) {
+        return response.data.items.map(function(userData) {
+          var user = new userFactory();
 
-    function _handleResponseFromAPI(response) {
-      return response.data.map(function(userData) {
-        return _getUserInfo(userData);
-      });
-    };
+          user.username = userData.login;
+          user.avatar = userData.avatar_url;
+          user.numOfFollowers = userData.followers;
+          user.numOfRepos = userData.public_repos;
 
-    function _getUserInfo(userData) {
-      return $http.get('https://api.github.com/users/' + userData.login + accessToken)
-        .then(_createUserObject);
-    };
-
-    function _createUserObject(response) {
-      var user = new userFactory();
-
-      user.userId = response.data.id;
-      user.username = response.data.login;
-      user.avatar = response.data.avatar_url;
-      user.numOfFollowers = response.data.followers;
-      user.numOfRepos = response.data.public_repos;
-
-      users.push(user);
-      return users;
-    };
+          users.push(user);
+          return users;
+        });
+      })
+    }
   }]);
