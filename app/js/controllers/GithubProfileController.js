@@ -6,17 +6,19 @@ angular
 
     self.users = [];
 
-    // GithubAPIService.getUsers().then(function(users) {
-    //   $q.all(users).then((values) => {
-    //     self.users = values[0];
-    //   });
-    // })
-
     self.search = function(searchText) {
-      self.users = [];
+      _emptyUserArray;
+      GithubAPIService.searchUsers(searchText)
+        .then(_updateUserArray);
+    };
 
-      GithubAPIService.searchUsers(searchText).then(function(users) {
-        self.users = users[0];
+    function _emptyUserArray() {
+      self.users = [];
+    };
+
+    function _updateUserArray(users) {
+      $q.all(users).then((values) => {
+        self.users = values[0];
       });
     };
   }]);

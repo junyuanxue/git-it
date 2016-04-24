@@ -16,7 +16,7 @@ describe('GithubProfileController', function() {
     httpBackend = $httpBackend;
     q = $q;
 
-    var accessToken = '?access_token=43ce04f42a3b62b50daebf8ecf91712dad18e5be'
+    var accessToken = '?access_token=9b5efb584d3a379322f8a95fc3ff4361baeea134'
 
     httpBackend.expectGET("https://api.github.com/users" + accessToken ).respond(usersData);
     httpBackend.expectGET("https://api.github.com/users/kyle" + accessToken).respond(user1Info);

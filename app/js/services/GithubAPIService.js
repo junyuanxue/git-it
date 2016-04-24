@@ -5,20 +5,24 @@ angular
     var self = this;
     var users = [];
 
-    var accessToken = 'access_token=43ce04f42a3b62b50daebf8ecf91712dad18e5be'
+    var accessToken = 'access_token=9b5efb584d3a379322f8a95fc3ff4361baeea134'
 
     self.searchUsers = function(username) {
       return $http.get('https://api.github.com/search/users?q=' + username + '+in:login&' + accessToken).then(function(response) {
         return response.data.items.map(function(userData) {
-          var user = new userFactory();
 
-          user.username = userData.login;
-          user.avatar = userData.avatar_url;
-          user.numOfFollowers = userData.followers;
-          user.numOfRepos = userData.public_repos;
+          return $http.get('https://api.github.com/users/' + userData.login + '?' + accessToken).then(function(response) {
+            var user = new userFactory();
 
-          users.push(user);
-          return users;
+            user.username = response.data.login;
+            user.url = response.data.html_url;
+            user.avatar = response.data.avatar_url;
+            user.numOfFollowers = response.data.followers;
+            user.numOfRepos = response.data.public_repos;
+
+            users.push(user);
+            return users;
+          })
         });
       })
     }

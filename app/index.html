@@ -7,7 +7,7 @@
     <script src="js/controllers/GithubProfileController.js"></script>
     <script src="js/factories/userFactory.js"></script>
     <script src="js/services/GithubAPIService.js"></script>
-    <title>Github Profile</title>
+    <title>Git-it: Github profile listing</title>
   </head>
   <body>
     <div id="users" ng-controller="GithubProfileController as ctrl">
@@ -17,7 +17,7 @@
         <li>
           <ul>
             <img src="{{ user.avatar }}">
-            <li>{{ user.username }}</li>
+            <li><a href="{{ user.url }}">{{ user.username }}</a></li>
             <li>Repositories: {{ user.numOfRepos }}</li>
             <li>Followers: {{ user.numOfFollowers }}</li>
           </ul>
