@@ -43,14 +43,13 @@ describe('GithubProfileController', function() {
   //   });
   // });
 
-  it('gets search text on each keystroke', function() {
+  it('searches user', function() {
     var user = new userFactory();
     user.username = 'kyle';
     user.avatar = 'kyle.png';
     user.numOfRepos = 4;
     user.numOfFollowers = 0;
 
-    ctrl.search('kyle');
     expect(ctrl.users).toEqual([user]);
   });
 });
