@@ -25,7 +25,7 @@ describe('Github Profile App', function() {
 
   it('displays a list of users', function() {
     browser.get('/');
-    var users = $$("#users ul li ul");
+    var users = $$("#users ul li ul");.
     expect(users.first().getText()).toMatch("kyle\nRepositories: 4\nFollowers: 0");
     expect(users.last().getText()).toMatch("harsheet\nRepositories: 10\nFollowers: 2");
   });

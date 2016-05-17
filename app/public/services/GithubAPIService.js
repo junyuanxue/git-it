@@ -21,7 +21,7 @@ angular
 
     function _createUserObject(response) {
       var user = new userFactory();
-      
+
       user.username = response.data.login;
       user.url = response.data.html_url;
       user.avatar = response.data.avatar_url;
