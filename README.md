@@ -6,6 +6,7 @@ A web app that allows you to search Github user and list results.
 * Angular JS
 * Protractor
 * Karma
+* Github API
 
 ## Contributors :cat:
 * [Junyuan Xue](https://github.com/junyuanxue)
